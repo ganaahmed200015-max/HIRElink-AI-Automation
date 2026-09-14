@@ -1,0 +1,540 @@
+{
+  "name": "HIRElink AI",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -912,
+        -64
+      ],
+      "id": "268de571-5b83-4f36-98e6-78e2397e1d79",
+      "name": "Telegram Trigger",
+      "webhookId": "05e98be5-94a9-4b3b-8035-e7f86050fd75",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZnZVHwnUdttKl4w4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "HIRElink AI  مرحبًا بك في HIRElink AI 👋  نساعدك في العثور على المرشح الأنسب لفرصتك الوظيفية من قاعدة بيانات المواهب المتاحة لدينا.  التخصصات المتاحة حاليًا:  💻 Computer Science ⚙️ Engineering 📊 Business 🎨 Design 🧪 Science  للبدء، اختر التخصص المطلوب من خلال النموذج التالي:  🔗https://forms.gle/wpimnWjc93BdQqCC9",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -736,
+        -64
+      ],
+      "id": "f1d5258c-0630-4b43-8366-588aa349cf64",
+      "name": "Send a text message",
+      "webhookId": "e5ae7dad-646a-47d9-9a5c-9eb6c30b0af5",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZnZVHwnUdttKl4w4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1dguWge-dKENsj_Wkm8F458dUD6GGn1XhCgxNo1h81p8",
+          "mode": "list",
+          "cachedResultName": "HIRElink AI (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dguWge-dKENsj_Wkm8F458dUD6GGn1XhCgxNo1h81p8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 918521912,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dguWge-dKENsj_Wkm8F458dUD6GGn1XhCgxNo1h81p8/edit#gid=918521912"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -592,
+        -176
+      ],
+      "id": "472855a0-65ba-4de6-a5af-f1b73f0df500",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "rKPOw7EY1POJIRpf",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.stringify($json) }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "You are a Job Requirements Analyst AI Agent. Your task is to read a job posting or job requirements entry and produce a clear, structured analysis of what is actually needed to fill that job.\n\nYou will receive fields such as: Position, Years of Experience, Job Type, Work Location, Experience Level, Required Education, City, and Required Skills.\n\nAnalyze the entry and produce a structured breakdown covering:\n1. Job Summary\n2. Must-Have Requirements\n3. Nice-to-Have Requirements\n4. Key Responsibilities (infer from position + skills if not explicitly given)\n5. Seniority Level (with justification)\n6. Skill Categories (Technical, Tools, Soft Skills, Domain Knowledge)\n7. Missing Information / Red Flags\n8. Suggested Sourcing Keywords\n\nReturn ONLY valid JSON, no markdown, no extra text, using this schema:\n{\n  \"job_title\": \"string\",\n  \"summary\": \"string\",\n  \"must_have\": [\"string\"],\n  \"nice_to_have\": [\"string\"],\n  \"responsibilities\": [\"string\"],\n  \"seniority_level\": \"string\",\n  \"seniority_reason\": \"string\",\n  \"skill_categories\": {\n    \"technical\": [\"string\"],\n    \"soft_skills\": [\"string\"],\n    \"tools\": [\"string\"],\n    \"domain_knowledge\": [\"string\"]\n  },\n  \"missing_or_flags\": [\"string\"],\n  \"sourcing_keywords\": [\"string\"]\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -448,
+        -336
+      ],
+      "id": "bb3f7c5d-8d5f-4e40-83f2-3114d67141d4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -448,
+        -128
+      ],
+      "id": "19db47a3-e277-4410-892a-223e97b39000",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NGuQUxdGmDm4HGnf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "19hgn-z11OeVaHw_VyVSlxx9eITRv6ww3",
+          "mode": "list",
+          "cachedResultName": "ats_test_cvs.pdf",
+          "cachedResultUrl": "https://drive.google.com/file/d/19hgn-z11OeVaHw_VyVSlxx9eITRv6ww3/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -160,
+        -336
+      ],
+      "id": "258b6d45-6206-4887-8326-774ee77ac4ba",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FwmXclICSqhdLqpL",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.text }}.\n{{ $('AI Agent').item.json.output }}",
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "You are an expert technical recruiter and CV screening analyst. Your job is to READ THE ACTUAL CONTENT of a PDF file containing one or more candidate CVs, extract structured information for each candidate, and evaluate them strictly against a given set of job requirements.\n\nYou must base every judgment ONLY on text that is actually present in the CV document. You must never invent, assume, guess, or infer information that is not explicitly stated in the CV.\n\n=== INPUT YOU WILL RECEIVE ===\n\n1. A PDF file (binary) containing the CVs of one or more candidates. The number of candidates is NOT fixed and may vary between runs.\n2. A JSON object describing the job requirements, structured as follows (produced by a previous analysis step):\n   - job_title\n   - summary\n   - must_have_requirements\n   - nice_to_have_requirements\n   - responsibilities\n   - seniority_level\n   - technical_skills\n   - soft_skills\n   - tools\n   - domain_knowledge\n   - flags\n   - sourcing_keywords\n\n=== YOUR TASK ===\n\nStep 1 — Extract and Segment\n- Read the full content of the PDF.\n- Identify how many distinct candidates are present in the document (it may contain 1, 2, 3, or more CVs concatenated together).\n- Use clear boundaries such as candidate names, contact info blocks, or \"Curriculum Vitae\" headers to separate one candidate's content from another.\n- Do not merge information from two different candidates into one profile.\n\nStep 2 — Extract Facts Per Candidate\nFor each candidate, extract (only if explicitly present in the text):\n- Full name\n- Contact info (email, phone) if present\n- Total years of experience (if stated or clearly calculable from listed dates; otherwise \"Not specified\")\n- Education\n- Work experience (roles, companies, durations, key achievements)\n- Technical skills\n- Soft skills (only if explicitly mentioned or clearly demonstrated through described responsibilities — do not fabricate)\n- Tools/technologies used\n- Certifications\n- Languages\n- Domain knowledge/industry experience\n\nStep 3 — Evaluate Against Job Requirements\nFor each candidate, compare extracted facts against the job requirements JSON and produce:\n- Must-have requirements met (list which ones, and which are missing)\n- Nice-to-have requirements met (list which ones, and which are missing)\n- Relevant experience summary (1-3 sentences, factual, no opinions)\n- Skills match summary\n- Education match (does it meet any stated requirement, or \"Not specified\" if the job requirements don't mention education)\n- Missing requirements (explicit list)\n- Potential red flags (e.g., unexplained employment gaps, job-hopping pattern, mismatched seniority, inconsistent dates) — only flag things that are objectively observable in the text, never speculate about a person's character or reasons.\n\nStep 4 — Score\n- Calculate a match_score from 0 to 100 based on:\n  - Must-have requirements are weighted most heavily (missing even one must-have should significantly lower the score).\n  - Nice-to-have requirements add smaller bonus weight.\n  - Relevant experience/seniority alignment contributes moderately.\n- Use the SAME scoring logic and weighting for every candidate in every run — do not adjust criteria between candidates.\n- Provide a short (1-3 sentence) score_explanation that references specific facts (e.g., \"Meets 4/5 must-have skills; missing AWS experience; 3 years short of required seniority\").\n\nStep 5 — Recommendation\n- After evaluating all candidates, identify which candidate(s) are the strongest match(es).\n- If there is a clear single best candidate, recommend just that one.\n- If two or more candidates are closely matched (within a small score margin), you may recommend multiple, and explain why.\n- Never recommend a candidate who fails a must-have requirement unless NO candidate meets all must-haves — in that case, state this limitation explicitly in the recommendation_notes.\n\n=== STRICT RULES ===\n\n1. Never fabricate details. If something is not in the CV, use exactly the string \"Not specified\" — never leave a field blank, never guess, never say \"likely\" or \"probably\".\n2. Every candidate found in the PDF must have their own evaluation object in the output. Do not skip, merge, or omit any candidate.\n3. Apply identical evaluation criteria and scoring logic to every candidate for fairness and consistency.\n4. Your output must be valid JSON and NOTHING else — no explanations, no markdown formatting, no code fences, no preamble, no trailing commentary.\n5. Follow the exact JSON schema provided below. Do not add extra top-level fields. Do not rename fields. Do not change data types.\n6. Keep the structure identical regardless of how many candidates are found (1, 2, 3, or more) — always use an array for candidates.\n7. Be deterministic: given the same CV content and same job requirements, always apply the same reasoning and produce a consistent structure.\n\n=== OUTPUT JSON SCHEMA ===\n\nReturn ONLY a JSON object matching this exact structure:\n\n{\n  \"job_title\": \"string, copied from job requirements input\",\n  \"total_candidates_found\": integer,\n  \"candidates\": [\n    {\n      \"candidate_id\": \"C1\",\n      \"full_name\": \"string or 'Not specified'\",\n      \"contact\": {\n        \"email\": \"string"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        64,
+        -96
+      ],
+      "id": "d06ef4b0-db44-4212-b30e-a58c058bb982",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        96
+      ],
+      "id": "7ca5d0f5-088f-4f44-b512-f80a7e5a4f78",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NGuQUxdGmDm4HGnf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        -208
+      ],
+      "id": "e23866de-049e-44bb-a83c-c4e284500032",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        32
+      ],
+      "id": "d397e452-facb-4dea-919b-02b0216bca1a",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FhTKHNtEU4s7H5dC",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        112,
+        256
+      ],
+      "id": "b9e34f64-9599-4b2f-b812-8d2eb0eccee8",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "FhTKHNtEU4s7H5dC",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.message }}",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "نعم، أريد استكمال الإجراءات",
+                    "additionalFields": {
+                      "callback_data": "={{ 'continue_' + $json.candidate_id }}"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        -240
+      ],
+      "id": "27f96c75-8869-40cc-8b58-7d7513086182",
+      "name": "Send a text message1",
+      "webhookId": "a26124ab-d4f5-4091-b9d5-e449636b94b0",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZnZVHwnUdttKl4w4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json.output;\nconst parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;\n\nconst candidates = parsed.candidates || [];\n\n// لو مفيش recommendation جاهزة من الـ AI، رتب المرشحين حسب match_score واختار الأعلى\nlet strongestIds = [];\nif (parsed.recommendation && Array.isArray(parsed.recommendation.strongest_candidates)) {\n  strongestIds = parsed.recommendation.strongest_candidates;\n} else if (parsed.best_match_id) {\n  strongestIds = [parsed.best_match_id];\n} else {\n  const sorted = [...candidates].sort((a, b) => (b.match_score || 0) - (a.match_score || 0));\n  if (sorted.length > 0) strongestIds = [sorted[0].candidate_id];\n}\n\nconst results = [];\n\nstrongestIds.forEach(id => {\n  const c = candidates.find(cand => cand.candidate_id === id);\n  if (!c) return;\n\n  const ev = c.evaluation || {};\n  const mustMet = (ev.must_have_met && ev.must_have_met.length) ? ev.must_have_met.join('، ') : 'لا يوجد';\n  const mustMissing = (ev.must_have_missing && ev.must_have_missing.length) ? ev.must_have_missing.join('، ') : 'لا يوجد';\n  const niceMet = (ev.nice_to_have_met && ev.nice_to_have_met.length) ? ev.nice_to_have_met.join('، ') : 'لا يوجد';\n\n  const experience = c.total_years_experience || c.years_of_experience || 'Not specified';\n\n  const text =\n`✅ تم إيجاد ماتش مناسب للوظيفة: ${parsed.job_title || 'Not specified'}\n\n👤 الاسم: ${c.full_name || 'Not specified'}\n🎓 التعليم: ${c.education || 'Not specified'}\n🕒 سنوات الخبرة: ${experience}\n📊 نسبة التطابق: ${c.match_score !== undefined ? c.match_score : 'Not specified'}%\n\n✅ المتطلبات الأساسية المتحققة: ${mustMet}\n⚠️ المتطلبات الأساسية الناقصة: ${mustMissing}\n➕ مميزات إضافية متحققة: ${niceMet}\n\n📝 ${c.score_explanation || ''}\n\nهل تريد استكمال الإجراءات واستلام السيرة الذاتية وبيانات التواصل؟`;\n\n  results.push({\n    json: {\n      message: text,\n      candidate_id: c.candidate_id,\n      full_name: c.full_name\n    }\n  });\n});\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        -240
+      ],
+      "id": "7926d734-5636-4b0a-8930-0d08d3a93030",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3b8abebe-b21f-4895-b3c6-836dda0c0d03",
+              "leftValue": "={{ $json.callback_query.data }}",
+              "rightValue": "=continue_C3",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        496,
+        64
+      ],
+      "id": "3bb8232c-b2aa-4f38-94ae-4c3ea89288e8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "callback_query"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        352,
+        48
+      ],
+      "id": "48f70d97-42fe-4bc7-a1d1-529d6c4fa727",
+      "name": "Telegram Trigger1",
+      "webhookId": "405247d7-b0e5-49a8-b1c0-cdecc8827e9e",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZnZVHwnUdttKl4w4",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger1').item.json.callback_query.message.chat.id }}",
+        "text": "برجاء التواصل مع ######## لأجل استكمال الجرائات",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        48
+      ],
+      "id": "9d941c93-5521-49fc-a901-4cfcea7f6100",
+      "name": "Send a text message2",
+      "webhookId": "174c4c74-0344-4604-b0ad-0d96ac2891a5",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZnZVHwnUdttKl4w4",
+          "name": "Telegram account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        []
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
