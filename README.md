@@ -25,3 +25,5 @@ An end-to-end automated HR and recruitment pipeline built with **n8n**, **Google
    - Add your **Google Gemini API Key**.
    - Connect your **Google Sheets Account**.
 4. **Activate:** Set the workflow to `Active` and test via your Telegram Bot.
+<img width="1014" height="802" alt="Telegram result" src="https://github.com/user-attachments/assets/088fc67b-3518-4f32-b143-8dc49da2d2ef" />
+<img width="1010" height="396" alt="Telegram start" src="https://github.com/user-attachments/assets/f7516f7a-a83b-4c7a-a851-ad7b3d02247a" />
